@@ -1,19 +1,4 @@
 import unescape from 'lodash/unescape.js';
-export const parseDBParams = (str) => {
-    const result = {};
-    str?.split(',').map((param) => {
-        const [_key, _value] = param.split(':');
-        const key = decodeURIComponent(_key?.trim() || '');
-        const value = decodeURIComponent(_value?.trim() || '');
-        result[key] = value;
-    });
-    return result;
-};
-export const stringifyDBParams = (data) => {
-    return Object.entries(data)
-        .map(([key, value]) => `${encodeURIComponent(key)}:${encodeURIComponent(value)}`)
-        .join(',');
-};
 const latin2cyrillic = (str) => {
     const charMap = {
         a: 'а',
@@ -57,8 +42,8 @@ export const parseCode = (str, ignoreError) => {
     let result = '';
     const pure = latin2cyrillic(unescape(str)
         .replace(/&nbsp;/g, ' ')
-        .replace(/\n/g, ' ')
-        .replace(/  /g, ' ')
+        .replace(/\n+/g, ' ')
+        .replace(/\s+/g, ' ')
         .replace(/^0+/, '')
         .trim());
     if (/\d+\.$/.test(pure)) {
@@ -84,8 +69,7 @@ export const parseTitle = (str) => {
     return unescape(str || '')
         .replace(/&nbsp;/g, ' ')
         .replace(/\n/g, ' ')
-        .replace(/  /g, ' ')
-        .slice(0, 200)
+        .replace(/\s{2,}/g, ' ')
         .trim();
 };
 //# sourceMappingURL=parse.js.map
