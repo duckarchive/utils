@@ -1,0 +1,64 @@
+{
+  "name": "@duckarchive/utils",
+  "version": "1.0.0",
+  "description": "Utility functions for duckarchive projects",
+  "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./parse": {
+      "import": "./dist/parse.js",
+      "types": "./dist/parse.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "prepare": "pnpm run build"
+  },
+  "keywords": [
+    "archive",
+    "utils",
+    "parser",
+    "database",
+    "cyrillic"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/duckarchive/utils.git"
+  },
+  "bugs": {
+    "url": "https://github.com/duckarchive/utils/issues"
+  },
+  "homepage": "https://github.com/duckarchive/utils#readme",
+  "devDependencies": {
+    "@types/lodash": "^4.14.202",
+    "@types/node": "^20.10.6",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
+    "eslint": "^8.56.0",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "dependencies": {
+    "lodash": "^4.17.21"
+  },
+  "pnpm": {
+    "overrides": {}
+  }
+}
