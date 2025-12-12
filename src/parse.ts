@@ -1,29 +1,5 @@
 import unescape from 'lodash/unescape.js';
 
-export const parseDBParams = (str: string | null): Record<string, string> => {
-  const result: Record<string, string> = {};
-
-  str?.split(',').map((param) => {
-    const [_key, _value] = param.split(':');
-    const key = decodeURIComponent(_key?.trim() || '');
-    const value = decodeURIComponent(_value?.trim() || '');
-    result[key] = value;
-  });
-
-  return result;
-};
-
-export const stringifyDBParams = (
-  data: Record<string, string | number | boolean>
-): string => {
-  return Object.entries(data)
-    .map(
-      ([key, value]) =>
-        `${encodeURIComponent(key)}:${encodeURIComponent(value)}`
-    )
-    .join(',');
-};
-
 const latin2cyrillic = (str: string): string => {
   const charMap: Record<string, string> = {
     a: 'а',
@@ -71,8 +47,8 @@ export const parseCode = (str: string, ignoreError?: boolean): string => {
   const pure = latin2cyrillic(
     unescape(str)
       .replace(/&nbsp;/g, ' ')
-      .replace(/\n/g, ' ')
-      .replace(/  /g, ' ')
+      .replace(/\n+/g, ' ')
+      .replace(/\s+/g, ' ')
       .replace(/^0+/, '')
       .trim()
   );
@@ -100,7 +76,6 @@ export const parseTitle = (str?: string): string => {
   return unescape(str || '')
     .replace(/&nbsp;/g, ' ')
     .replace(/\n/g, ' ')
-    .replace(/  /g, ' ')
-    .slice(0, 200)
+    .replace(/\s{2,}/g, ' ')
     .trim();
 };
