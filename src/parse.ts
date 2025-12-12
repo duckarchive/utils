@@ -49,7 +49,7 @@ export const parseCode = (str: string, ignoreError?: boolean): string => {
       .replace(/&nbsp;/g, ' ')
       .replace(/\n+/g, ' ')
       .replace(/\s+/g, ' ')
-      .replace(/^0+/, '')
+      .replace(/^\s*0+(\d)/g, '$1')
       .trim()
   );
   if (/\d+\.$/.test(pure)) {

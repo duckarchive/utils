@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseCode } from '../src/parse';
+import { parseCode } from './parse';
 
 describe('parseCode', () => {
   it('should parse valid code correctly', () => {
@@ -45,9 +45,9 @@ describe('parseCode', () => {
     expect(result4).toEqual('10Г');
   });
 
-  it('EDGE CASE: should detect ending with dot as "Н"', () => {
-    const result = parseCode('10.');
-    expect(result).toBe('10Н');
+  it('should allow "0" as valid code', () => {
+    const result = parseCode(' 0000 ');
+    expect(result).toBe('0');
   });
 
   it('should extract numeric patterns from long strings', () => {
@@ -91,5 +91,10 @@ describe('parseCode', () => {
     expect(result1).toEqual('10Ч123');
     expect(result2).toEqual('10Ч123');
     expect(result3).toEqual('10Ч123');
+  });
+
+  it('EDGE CASE: should detect ending with dot as "Н"', () => {
+    const result = parseCode('10.');
+    expect(result).toBe('10Н');
   });
 });

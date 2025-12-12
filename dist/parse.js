@@ -44,7 +44,7 @@ export const parseCode = (str, ignoreError) => {
         .replace(/&nbsp;/g, ' ')
         .replace(/\n+/g, ' ')
         .replace(/\s+/g, ' ')
-        .replace(/^0+/, '')
+        .replace(/^\s*0+(\d)/g, '$1')
         .trim());
     if (/\d+\.$/.test(pure)) {
         // temporary solution for "10." in https://e-resource.tsdavo.gov.ua/fonds/8/
