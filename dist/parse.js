@@ -1,3 +1,4 @@
+import uniqBy from 'lodash/uniqBy.js';
 import unescape from 'lodash/unescape.js';
 const latin2cyrillic = (str) => {
     const charMap = {
@@ -71,5 +72,42 @@ export const parseTitle = (str) => {
         .replace(/\n/g, ' ')
         .replace(/\s{2,}/g, ' ')
         .trim();
+};
+export const parseYears = (str) => {
+    if (!str) {
+        return [];
+    }
+    const parts = str
+        .replace(/—–-/g, '-')
+        .split(/,|;/)
+        .map((p) => p.trim());
+    const ranges = parts.map((part) => {
+        // Case 1: Range of years (e.g., "1941-1945", "1941 - 1945")
+        const rangeMatch = part.match(/^(\d{4})\s*-\s*(\d{4})$/);
+        if (rangeMatch) {
+            return {
+                start_year: parseInt(rangeMatch[1], 10),
+                end_year: parseInt(rangeMatch[2], 10),
+            };
+        }
+        // Case 2: Single year (e.g., "1941")
+        const singleYearMatch = part.match(/^(\d{4})$/);
+        if (singleYearMatch) {
+            const year = parseInt(singleYearMatch[1], 10);
+            return { start_year: year, end_year: year };
+        }
+        // If no specific format is matched, try to find all 4-digit numbers and take min/max
+        const allYears = (part.match(/\d{4}/g) || []).map((y) => parseInt(y, 10));
+        if (allYears.length > 0) {
+            const validYears = allYears.filter((y) => y > 1000 && y < 3000);
+            if (validYears.length > 0) {
+                return {
+                    start_year: Math.min(...validYears),
+                    end_year: Math.max(...validYears),
+                };
+            }
+        }
+    });
+    return uniqBy(ranges.filter(Boolean), (range) => `${range.start_year}-${range.end_year}`);
 };
 //# sourceMappingURL=parse.js.map

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseCode } from './parse';
+import { parseCode, parseYears } from './parse';
 
 describe('parseCode', () => {
   it('should parse valid code correctly', () => {
@@ -96,5 +96,65 @@ describe('parseCode', () => {
   it('EDGE CASE: should detect ending with dot as "Н"', () => {
     const result = parseCode('10.');
     expect(result).toBe('10Н');
+  });
+});
+
+describe('parseYears', () => {
+  it('should parse single year', () => {
+    const result = parseYears('1999');
+    expect(result).toEqual([{ start_year: 1999, end_year: 1999 }]);
+  });
+
+  it('should parse year range with hyphen', () => {
+    const result = parseYears('2000-2005');
+    expect(result).toEqual([{ start_year: 2000, end_year: 2005 }]);
+  });
+
+  it('should parse year range with en dash', () => {
+    const result = parseYears('2010–2015');
+    expect(result).toEqual([{ start_year: 2010, end_year: 2015 }]);
+  });
+
+  it('should parse year range with md dash', () => {
+    const result = parseYears('2010—2015');
+    expect(result).toEqual([{ start_year: 2010, end_year: 2015 }]);
+  });
+
+  it('should parse multiple years and ranges', () => {
+    const result = parseYears('1990, 1995-2000; 2005');
+    expect(result).toEqual([
+      { start_year: 1990, end_year: 1990 },
+      { start_year: 1995, end_year: 2000 },
+      { start_year: 2005, end_year: 2005 },
+    ]);
+  });
+
+  it('should parse years from ISO date', () => {
+    const result = parseYears('1999-12-31, 2000-01-01 до 2005-12-31');
+    expect(result).toEqual([
+      { start_year: 1999, end_year: 1999 },
+      { start_year: 2000, end_year: 2005 },
+    ]);
+  });
+
+  it('should parse years from local date', () => {
+    const result = parseYears('31.12.1999, 01.01.2000-31.12.2005');
+    expect(result).toEqual([
+      { start_year: 1999, end_year: 1999 },
+      { start_year: 2000, end_year: 2005 },
+    ]);
+  });
+
+  it('should ignore invalid year formats', () => {
+    const result = parseYears('abcd, 2001-xyz, 2010');
+    expect(result).toEqual([
+      { start_year: 2001, end_year: 2001 },
+      { start_year: 2010, end_year: 2010 },
+    ]);
+  });
+
+  it('should return empty array for empty input', () => {
+    const result = parseYears('');
+    expect(result).toEqual([]);
   });
 });
