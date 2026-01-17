@@ -40,5 +40,4 @@ MIT
 
 ## Repository
 
-- GitHub: [duckarchive/archive-duck](https://github.com/duckarchive/archive-duck)
-
+- GitHub: [duckarchive/utils](https://github.com/duckarchive/utils)
