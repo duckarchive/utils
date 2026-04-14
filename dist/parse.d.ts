@@ -1,4 +1,4 @@
-export declare const parseCode: (str: string, ignoreError?: boolean) => string;
+export declare const parseCode: (str: string, ignoreError?: boolean, isV2?: boolean) => string;
 export declare const parseTitle: (str?: string) => string;
 interface YearRange {
     start_year: number;
