@@ -43,7 +43,14 @@ const shortenSpecialTerms = (str: string): string => {
     .replace(/част?и?н?а?/i, 'ч');
 };
 
-export const parseCode = (str: string, ignoreError?: boolean): string => {
+const specialTerms = (str: string): string => {
+  return str
+    .replace(/до(п|д)/i, 'дод')
+    .replace(/том/i, 'том')
+    .replace(/част?и?н?а?/i, 'част');
+};
+
+export const parseCode = (str: string, ignoreError?: boolean, isV2?: boolean): string => {
   let result = '';
   const pure = latin2cyrillic(
     unescape(str)
@@ -70,7 +77,11 @@ export const parseCode = (str: string, ignoreError?: boolean): string => {
     }
   }
 
-  return shortenSpecialTerms(result).toUpperCase().trim();
+  if (isV2) {
+    return specialTerms(result).toUpperCase().trim();
+  } else {
+    return shortenSpecialTerms(result).toUpperCase().trim();
+  }
 };
 
 export const parseTitle = (str?: string): string => {
